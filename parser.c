@@ -72,7 +72,7 @@ void parse_file ( char * filename,
   color g;
 
   g.red = 255;
-  g.green = 0;
+  g.green = 125;
   g.blue = 255;
   
   clear_screen(s);
@@ -85,9 +85,9 @@ void parse_file ( char * filename,
   while ( fgets(line, 255, f) != NULL ) {
     line[strlen(line)-1]='\0';
     //printf(":%s:\n",line);
-    double x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4;
-   
-    
+    double x, y, z, x1, y1, z1, x2, y2, x3, y3, x4, y4;
+    double cx, cy, r, r1, r2, width, height, depth;
+
     if ( strncmp(line, "line", strlen(line)) == 0 ) {
       //      printf("LINE!\n");
       fgets(line, 255, f);
@@ -174,7 +174,7 @@ void parse_file ( char * filename,
     else if ( strncmp(line, "display", strlen(line)) == 0 ) {
       clear_screen(s);
       draw_lines(pm, s, g);
-      display(s);
+      //display(s);
     }
     else if ( strncmp(line, "save", strlen(line)) == 0 ) {
       fgets(line, 255, f);
@@ -186,8 +186,27 @@ void parse_file ( char * filename,
     else if ( strncmp(line, "quit", strlen(line)) == 0 ) {
       return;
     }
+    else if ( strncmp(line, "sphere", strlen(line)) == 0) {
+      fgets(line, 255, f);
+      sscanf(line, "%lf %lf %lf", &cx, &cy, &r);
+      add_sphere(pm, cx, cy, r, 0.01);
+    }
+    else if ( strncmp(line, "torus", strlen(line)) == 0) {
+      fgets(line, 255, f);
+      sscanf(line, "%lf %lf %lf %lf", &cx, &cy, &r1, &r2);
+      add_torus(pm, cx, cy, r1, r2, 0.01);
+    }
+    else if ( strncmp(line, "box", strlen(line)) == 0) {
+      fgets(line, 255, f);
+      sscanf(line, "%lf %lf %lf %lf %lf %lf", &x, &y, &z, &width, &height, &depth);
+      add_box(pm, x, y, z, width, height, depth);
+    }
+    else if ( strncmp(line, "clear", strlen(line)) == 0) {
+      clear_screen(s);
+    }
     else {
-      printf("Invalid command\n");
+      fgets(line, 255, f);
+      printf("Invalid command: %s\n", line);
     }
   }
   
