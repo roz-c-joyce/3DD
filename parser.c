@@ -88,6 +88,8 @@ void parse_file ( char * filename,
     double x, y, z, x1, y1, z1, x2, y2, x3, y3, x4, y4;
     double cx, cy, r, r1, r2, width, height, depth;
 
+    printf("COMMAND: %s\n", line);
+
     if ( strncmp(line, "line", strlen(line)) == 0 ) {
       //      printf("LINE!\n");
       fgets(line, 255, f);
@@ -97,6 +99,9 @@ void parse_file ( char * filename,
       add_edge(pm, x, y, z, x1, y1, z1);
       // printf( "%lf %lf %lf %lf %lf %lf\n", x, y, z, x1, y1, z1);
     }
+    else if(line[0] == '#'){
+      continue;
+    }  
     else if ( strncmp(line, "circle", strlen(line)) == 0 ) {
       //printf("CIRCLE\n");
       fgets(line, 255, f);
@@ -174,6 +179,7 @@ void parse_file ( char * filename,
     else if ( strncmp(line, "display", strlen(line)) == 0 ) {
       clear_screen(s);
       draw_lines(pm, s, g);
+      save_extension(s, "parser.png"); // because display doesnt work for me
       //display(s);
     }
     else if ( strncmp(line, "save", strlen(line)) == 0 ) {
